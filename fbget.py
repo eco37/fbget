@@ -1,12 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
  
-# print header
-print '-'*77
-print ' Use function getAddresses( "url" ) to retreive links from current'
-print ' URL.'
-print '-'*77
-
 import urllib
 import urllib2
 import ClientCookie
