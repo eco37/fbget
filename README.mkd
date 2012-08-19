@@ -2,6 +2,8 @@ fbget
 ==========
 Fbget is a small script that allows users on facebook to download all images a user have been tagd on.
 
+The script has ben testen on the new profile(Timeline) on Facebook and Ubuntu 11.04 and 11.10.
+
 Contributors
 ------------
 * Max Sidenstjärna(eco37)
