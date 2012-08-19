@@ -1,27 +1,38 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
- 
+#! /usr/bin/python
+# -*- coding: utf8 -*-
+
+"""
+Script that allows a user on Facebook to download profile taged pictures. '
+
+"""
+
 import urllib
 import urllib2
 import ClientCookie
 import cookielib
 import argparse
-
 from os.path import expanduser
 
-def Login(username, password):
+__author__    = "Max Sidenstjärna"
+__copyright__ = "Copyright 2012 Max Sidenstjärna"
+__license__   = "GPLv3"
 
+
+#===========================================================================#
+# Method that authenticates the user and creates a cookie for the session.  #
+#===========================================================================#
+def Login(username, password):
     cj = cookielib.CookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    resp = opener.open('http://www.facebook.com/') # save a cookie
-    theurl = 'http://www.facebook.com/login.php' # an example url that sets a cookie, try different urls here and see the cookie collection you can make !
+    resp = opener.open('http://www.facebook.com/') 
+    theurl = 'http://www.facebook.com/login.php' 
     body={'email':username,'pass':password}
 
-    txdata = urllib.urlencode(body) # if we were making a POST type request, we could encode a dictionary of values here - using urllib.urlencode
-    txheaders = {'User-agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'} # fake a user agent, some websites (like google) don't like automated exploration
+    txdata = urllib.urlencode(body)     
+    txheaders = {'User-agent' : 'Mozilla/5.0 (Ubuntu; X11; Linux i686; rv:9.0.1) Gecko/20100101; Firefox/9.0.1'} 
  
-    req = urllib2.Request(theurl, txdata, txheaders) # create a request object
-    handle = opener.open(req) # and open it to return a handle on the url
+    req = urllib2.Request(theurl, txdata, txheaders) 
+    handle = opener.open(req) 
     
     source = handle.read()
     source = source.split(' ')
@@ -43,14 +54,16 @@ def Login(username, password):
                             y = y[3]
                             user.append( y )
     
-    #print user
 
     handle.close()
 
     return opener, user[0]
 
+
+#===========================================================================#
+# Method for collecting  all the urls to every image.                       #
+#===========================================================================#
 def getAddresses( opener, url ):
-    print "Addresses"
     handle = opener.open( url )
     
     source = handle.read()
@@ -72,11 +85,10 @@ def getAddresses( opener, url ):
 
 
 #===========================================================================#
-# Class for downloading the image.                                          #
+# Method for downloading the image.                                         #
 #===========================================================================#
 def DownloadImage( opener, url ):
 
-    print "Download"
     handle = opener.open( url )
     
     source = handle.read()
@@ -94,8 +106,6 @@ def DownloadImage( opener, url ):
                     image.append( m[:] )
 
     handle.close()
-    print image
-    print image[0]
 
     file_name = image[0].split('/')[-1]
     file_name = file_name[:-5]
@@ -120,6 +130,10 @@ def DownloadImage( opener, url ):
 
     f.close()
 
+
+#===========================================================================#
+# Method that handels all arguments.                                        #
+#===========================================================================#
 def ParseArgs():
     
     parser = argparse.ArgumentParser(
@@ -144,12 +158,9 @@ def ParseArgs():
 
 
 
-def test():
-    foo = 1
-    bar = 2
-    return (foo,bar)
-
-
+#===========================================================================#
+# Main function.                                                            #
+#===========================================================================#
 if __name__ == "__main__":
     
     #print expanduser("~")+'/fbget'
@@ -162,13 +173,14 @@ if __name__ == "__main__":
     #print args.save_path
     
     (opener, userid) = Login( args.Username, args.Password )
-    
-    print userid
+       
+    print "Profile userid: " + userid
+    url = "https://www.facebook.com/media/set/?set=t." + userid + "&type=3"
 
-    #images = getAddresses(opener, 'https://www.facebook.com/media/set/?set=a.1271022982571.2035475.1439770062&type=3')
+    images = getAddresses( opener, url )
     
-    #for i in images:
-    #    print i
-    #    DownloadImage( opener, i )
+    for i in images:
+        DownloadImage( opener, i )
+    
 
 

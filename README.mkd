@@ -1,0 +1,9 @@
+fbget
+==========
+Fbget is a small script that allows users on facebook to download all images a user have been tagd on.
+
+Contributors
+------------
+* Max Sidenstjärna(eco37)
+
+License [GPLv3](http://www.gnu.org/copyleft/gpl-3.0.html)
